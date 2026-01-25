@@ -1,9 +1,11 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useState, useEffect, useRef } from "react";
 import { assets } from '../assets/assets.js'
 
 const SignUpPage = () => {
 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -17,16 +19,32 @@ const SignUpPage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleRegister = (e) => {
-    e.preventDefault(); 
 
-    const { firstName, email, password } = formData;
-    if (firstName && email && password.length > 5) {
-      alert("Registration Successful!");
-    } else {
-      alert("Please fill in the required fields");
+
+const handleRegister = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message);
+      return;
     }
-  };
+
+    alert("Registration Successful! Please login.");
+    navigate("/");
+  } catch (error) {
+    alert("Server error");
+  }
+};
+
   return (
     <div className="h-screen w-full bg-cover bg-center flex justify-center items-center" style={{ backgroundImage: `url(${assets.background})` }}>
       <div className=' w-[300px] md:w-[500px] h-auto bg-white rounded-md shadow-md '>
