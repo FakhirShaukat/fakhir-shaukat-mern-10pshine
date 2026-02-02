@@ -42,7 +42,7 @@ const EditNotes = ({ note, onClose, onUpdate, onDelete }) => {
 
         <div className=" mt-3">
           <div className="flex gap-2">
-            <button onClick={onClose} className="px-3 py-1 bg-red-500 rounded text-sm text-white">
+            <button onClick={onClose} className="font-roboto px-3 py-1 bg-red-500 rounded text-sm text-white">
               Cancel
             </button>
             <button

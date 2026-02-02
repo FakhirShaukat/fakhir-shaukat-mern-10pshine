@@ -1,11 +1,13 @@
-import express from "express";
-import { login, signup, googleLogin } from "../controllers/authController.js"; 
-// Make sure googleLogin is exported from authController.js
+import  express from 'express';
+import { registerUser, loginUser, googleLogin } from '../controllers/authController.js';
+
 
 const router = express.Router();
 
-router.post("/login", login);
-router.post("/signup", signup);
-router.post("/google", googleLogin); // use the imported googleLogin function
+router.post('/signup', registerUser);
+router.post('/login', loginUser);
+router.post('/google', googleLogin); // for Google OAuth
+
+
 
 export default router;

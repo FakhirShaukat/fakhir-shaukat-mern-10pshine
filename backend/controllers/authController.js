@@ -1,99 +1,98 @@
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import User from "../models/User.js";
-import { OAuth2Client } from "google-auth-library";
-
+import User from '../models/User.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID);
 
+const generateToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-// Manual login
-export const login = async (req, res) => {
-  const { email, password } = req.body;
+// ------------------ Manual SignUp ------------------
+const registerUser = async (req, res) => {
   try {
-    if (!email || !password)
-      return res.status(400).json({ message: "Please enter email and password" });
+    const { firstName, lastName, phone, email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "User not found" });
+    if (!firstName || !email || !password) {
+      return res.status(400).json({ message: 'Please add all required fields' });
+    }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    const userExists = await User.findOne({ email });
+    if (userExists) return res.status(400).json({ message: 'User already exists' });
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
-    res.status(200).json({ user, token });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-// Signup
-export const signup = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-  try {
-    const existing = await User.findOne({ email });
-    if (existing) return res.status(400).json({ message: "User already exists" });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     const user = await User.create({
       firstName,
       lastName,
+      phone,
       email,
       password: hashedPassword,
     });
 
-    res.status(201).json({ user });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    if (user) {
+      res.status(201).json({
+        user,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(400).json({ message: 'Invalid user data' });
+    }
+  } catch (error) {
+    console.error("SIGNUP ERROR:", error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
-// Google login
-export const googleLogin = async (req, res) => {
-  try {
-    const { token } = req.body;
 
+// ------------------ Manual Login ------------------
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (user && user.password && (await bcrypt.compare(password, user.password))) {
+    res.json({
+      user,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400).json({ message: 'Invalid credentials' });
+  }
+};
+
+// ------------------ Google Login ------------------
+const googleLogin = async (req, res) => {
+  const { token } = req.body;
+
+  try {
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
+    const { sub, email, name } = payload;
 
-    let user = await User.findOne({ email: payload.email });
+    let user = await User.findOne({ email });
+
     if (!user) {
-      user = new User({
-        name: payload.name,
-        email: payload.email,
-        role: "hr",
+      const [firstName, ...rest] = name.split(' ');
+      const lastName = rest.join(' ') || '';
+      user = await User.create({
+        firstName,
+        lastName,
+        email,
+        googleId: sub,
       });
-      await user.save();
     }
 
-    const appToken = jwt.sign(
-      { email: user.email, name: user.name },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-
     res.json({
-      user: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
-      token: appToken,
+      user,
+      token: generateToken(user._id),
     });
-  } catch (err) {
-    console.error("Google login error:", err);
-    res.status(400).json({ error: "Invalid Google token" });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: 'Google login failed' });
   }
 };
+
+export { registerUser, loginUser, googleLogin };

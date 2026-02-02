@@ -66,7 +66,7 @@ const LoginPage = () => {
           localStorage.setItem("token", data.token);
           localStorage.setItem("userEmail", data.user.email);
 
-          alert(`Welcome ${data.user.name}`);
+          alert(`Welcome ${data.user.firstName}`);
           navigate("/dashboard");
         } else {
           alert(data.error || "Google login failed");
@@ -120,7 +120,7 @@ const LoginPage = () => {
           <p className="pt-2 text-xs text-gray-400">Take notes and organize your thoughts</p>
 
           <div className="inputs flex flex-col gap-4 pt-2">
-            <input type="email" placeholder="Enter your Email" className="border text-sm p-2" value={email} onChange={(e) => setEmail(e.target.value)}/>
+            <input type="email" placeholder="Enter your Email" className="border  text-sm p-2" value={email} onChange={(e) => setEmail(e.target.value)}/>
             <input type="password" placeholder="Enter your Password" className="border text-sm p-2" value={password} onChange={(e) => setPassword(e.target.value)}/>
             <div className="flex flex-col items-center">
               <button className="flex justify-end text-xs gap-2">
@@ -130,7 +130,7 @@ const LoginPage = () => {
               <button className="flex justify-end text-xs text-blue-600 underline"><a href="/forgot">Forgot Password ?</a></button>
             </div>
 
-            <div className="flex justify-center"><button onClick={handleLogin} className="border rounded-full p-2 text-sm w-[85%] font-semibold bg-blue-500 text-white hover:bg-blue-600 transition duration-300">Login</button></div>
+            <div className="flex justify-center"><button onClick={handleLogin} className=" rounded-full p-2 text-sm w-[45%] font-semibold bg-blue-500 text-white hover:bg-blue-600 transition duration-300">Login</button></div>
             
           </div>
 
@@ -141,7 +141,7 @@ const LoginPage = () => {
           </div>
 
           {/* Google Sign-In */}
-          <div id="google-login-btn" className="google-signUp flex justify-center items-center "></div>
+          <div id="google-login-btn" className="google-signUp flex justify-center items-center pt-2 "></div>
         </div>
       </div>
     </div>
