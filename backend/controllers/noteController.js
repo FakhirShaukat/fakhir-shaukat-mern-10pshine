@@ -2,24 +2,39 @@ import Note from "../models/Note.js";
 
 // GET all notes
 export const getNotes = async (req, res) => {
-  const notes = await Note.find().sort({ createdAt: -1 });
-  res.json(notes);
+  try {
+    const notes = await Note.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.json(notes);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 // CREATE note
 export const createNote = async (req, res) => {
-  const { title, description, deadline, color } = req.body;
+  try {
+    const { title, description, deadline, color } = req.body;
 
-  const note = new Note({
-    title,
-    description,
-    deadline,
-    color,
-  });
+    if (!req.user) return res.status(401).json({ message: "User not found" });
 
-  const createdNote = await note.save();
-  res.status(201).json(createdNote);
+    const note = new Note({
+      user: req.user._id,
+      title,
+      description,
+      deadline,
+      color,
+    });
+
+    const createdNote = await note.save();
+    res.status(201).json(createdNote);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 };
+
+
 
 // UPDATE note
 export const updateNote = async (req, res) => {

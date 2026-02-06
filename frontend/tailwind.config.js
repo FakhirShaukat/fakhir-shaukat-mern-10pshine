@@ -8,6 +8,7 @@ export default {
     extend: {
       fontFamily: {
         outfit: ['Outfit', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
       },
     },
   },

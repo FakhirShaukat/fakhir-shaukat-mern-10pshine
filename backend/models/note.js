@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
 
-const noteSchema = mongoose.Schema(
+const noteSchema = new mongoose.Schema(
   {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -13,15 +18,8 @@ const noteSchema = mongoose.Schema(
     deadline: {
       type: String,
     },
-    color: {
-      type: String,
-      default: "bg-orange-400",
-    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const Note = mongoose.model("Note", noteSchema);
-export default Note;
+export default mongoose.model("Note", noteSchema);

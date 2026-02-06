@@ -3,7 +3,6 @@ dotenv.config();
 
 import cors from "cors";
 import express from "express";
-import session from "express-session";
 import connectDB from "./config/database.js";
 import noteRoutes from "./routes/noteRoute.js";
 import authRoutes from "./routes/authRoute.js";
@@ -14,8 +13,6 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
 
 /*REST APIs*/ 
 app.use("/api/notes", noteRoutes);

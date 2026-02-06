@@ -8,9 +8,9 @@ const ForgotPasswordPage = () => {
         <div className='form-details p-4'>
           <div>
             <h1 className='text-2xl font-semibold'>Forgot Your Password? Rest Your Access Here</h1>
-            <div className='inputs flex flex-col gap-4 pt-2'>
-              <input type="email" placeholder='Email' className='border text-sm p-2' />
-              <button className='border p-2 text-sm font-semibold bg-blue-500 text-white'>Send code</button>
+            <div className='inputs flex flex-col gap-4 pt-2 items-center'>
+              <input type="email" placeholder='Email' className='w-full border text-sm p-2' />
+              <button className='border rounded-full w-[45%] p-2 text-sm font-semibold bg-blue-500 text-white hover:bg-blue-600 transition duration-300'>Send code</button>
             </div>
           </div>
 

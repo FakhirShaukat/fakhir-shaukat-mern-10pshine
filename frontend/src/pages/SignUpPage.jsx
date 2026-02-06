@@ -61,16 +61,9 @@ const handleRegister = async (e) => {
               <input type="text" placeholder='Phone Number' name='phone' onChange={handleChange} className='border text-sm p-2' />
               <input type="email" placeholder='Email' name='email' onChange={handleChange} className='border text-sm p-2' />
               <input type="password" placeholder='Password' name='password' onChange={handleChange} className='border text-sm p-2' />
-              <button onClick={handleRegister} className='border p-2 text-sm font-semibold bg-blue-500 text-white'>Register</button>
+              <div className='flex justify-center'><button onClick={handleRegister} className='rounded-full p-2 text-sm w-[85%] font-semibold bg-blue-500 text-white hover:bg-blue-600 transition duration-300'>Register</button></div>
             </div>
-            <div className='divider flex justify-center items-center gap-2 pt-2 text-sm text-gray-400'>
-              <div className='bg-gray-300 flex-1 h-px'></div>
-              <div>OR</div>
-              <div className='bg-gray-300 flex-1 h-px'></div>
-            </div>
-            <div className='google-signUp mt-2 p-2 border text-center bg-red-500'>
-              <button className='text-xs text-white font-semibold'>Continue with Google</button>
-            </div>
+
           </div>
 
         </div>

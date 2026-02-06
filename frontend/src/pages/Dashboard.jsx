@@ -10,19 +10,87 @@ const Dashboard = () => {
     const [editNote, setEditNote] = useState(null);
     const [showUserMenu, setShowUserMenu] = useState(false);
     const userMenuRef = useRef(null);
+    const user = JSON.parse(localStorage.getItem("user"));
 
-    const handleAddNote = (note) => {
-        const newNote = { ...note, id: Date.now() }; // assign a unique id
-        setNotes([...notes, newNote]);
+
+useEffect(() => {
+    const fetchNotes = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch("http://localhost:5000/api/notes", {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await res.json();
+            setNotes(Array.isArray(data.notes) ? data.notes : []); // ensure it's an array
+        } catch (err) {
+            console.error("Failed to fetch notes:", err);
+            setNotes([]);
+        }
     };
 
-    const handleUpdateNote = (updatedNote) => {
-        setNotes(notes.map((n) => (n.id === updatedNote.id ? updatedNote : n)));
+    fetchNotes();
+}, []);
+
+
+
+    const handleAddNote = async (note) => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch("http://localhost:5000/api/notes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(note),
+            });
+
+            const data = await res.json();
+            setNotes([data, ...notes]); // add new note at the top
+        } catch (err) {
+            console.error("Failed to add note:", err);
+        }
     };
 
-    const handleDeleteNote = (id) => {
-        setNotes(notes.filter((n) => n.id !== id));
+
+    const handleUpdateNote = async (updatedNote) => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`http://localhost:5000/api/notes/${updatedNote._id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(updatedNote),
+            });
+
+            const data = await res.json();
+            setNotes(notes.map((n) => (n._id === data._id ? data : n)));
+        } catch (err) {
+            console.error("Failed to update note:", err);
+        }
     };
+
+    const handleDeleteNote = async (id) => {
+        try {
+            const token = localStorage.getItem("token");
+            await fetch(`http://localhost:5000/api/notes/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            setNotes(notes.filter((n) => n._id !== id));
+        } catch (err) {
+            console.error("Failed to delete note:", err);
+        }
+    };
+
 
 
     return (
@@ -77,9 +145,8 @@ const Dashboard = () => {
                         {showUserMenu && (
                             <div className="absolute flex flex-col justify-between  right-10 mt-60 w-[200px] h-[200px] bg-white border rounded shadow-lg z-50">
                                 <div className="text-center p-4 pt-8">
-                                    <h1 className="font-semibold text-lg">Welcome User !</h1>
-                                    <p className="text-xs pt-2">fakhir@gmail.com</p>
-                                    <p className="text-xs pt-2">03312335426</p>
+                                    <h1 className="font-semibold text-lg">Welcome {user.firstName} !</h1>
+                                    <p className="text-xs pt-2">{user.email}</p>
                                 </div>
                                 <div className="cta-buttons flex flex-col">
                                     <ul className="text-xs ">
@@ -102,10 +169,10 @@ const Dashboard = () => {
 
                     <div className="notes mt-4 flex flex-wrap gap-4">
                         {notes.map((note) => (
-                            <div key={note.id} className="note flex flex-col justify-between border w-[280px] h-[250px] p-4 bg-white shadow-md rounded-lg">
+                            <div key={note._id} className="note flex flex-col justify-between border w-[280px] h-[250px] p-4 bg-white shadow-md rounded-lg">
                                 <div>
                                     <h1 className="text-lg font-semibold border-b">{note.title}</h1>
-                                    <p className="pt-2 text-sm">{note.description}</p>
+                                    <p className="pt-4 text-sm">{note.description}</p>
                                     <p className="pt-2 text-sm">
                                         <span className="font-bold">Deadline:</span> {note.deadline}
                                     </p>
