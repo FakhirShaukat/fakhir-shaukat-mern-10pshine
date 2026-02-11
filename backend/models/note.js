@@ -11,12 +11,9 @@ const noteSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    description: {
+    content: {
       type: String,
-      required: true,
-    },
-    deadline: {
-      type: String,
+      required: true, // store HTML from ReactQuill
     },
   },
   { timestamps: true }

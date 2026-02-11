@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String }, // optional for Google login
   googleId: { type: String }, // for Google OAuth users
+  resetCode: { type: String }, // for password reset
+  resetCodeExpiry: { type: Date }, // for password reset
 }, { timestamps: true });
 
 export default mongoose.model('User', userSchema);

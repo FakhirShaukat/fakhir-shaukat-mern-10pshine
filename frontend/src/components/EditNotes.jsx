@@ -1,57 +1,42 @@
 import React, { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { assets } from "../assets/assets";
 
 const EditNotes = ({ note, onClose, onUpdate, onDelete }) => {
   const [title, setTitle] = useState(note.title);
-  const [description, setDescription] = useState(note.description);
-  const [deadline, setDeadline] = useState(note.deadline);
+  const [content, setContent] = useState(note.content);
 
   const handleUpdate = () => {
-    if (!title.trim()) return;
-    onUpdate({ ...note, title, description, deadline });
+    if (!title.trim() || !content.trim()) return; // ✅ check both
+    onUpdate({ ...note, title, content });
     onClose();
   };
 
-
   return (
     <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-      <div className="bg-white w-[350px] rounded-lg p-4">
+      <div className="bg-white w-[500px] rounded-lg p-4">
         <h2 className="text-lg font-semibold mb-2">Edit Note</h2>
 
         <input
           type="text"
           placeholder="Title"
-          className="border w-full p-2 mb-2"
+          className="border w-full border-gray-300 p-2 mb-2"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        <textarea
-          placeholder="Description"
-          className="border w-full p-2 h-24 resize-none mb-2"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <ReactQuill value={content} onChange={setContent} className="mb-2 h-[150px]" />
 
-        <input
-          type="text"
-          placeholder="Deadline"
-          className="border w-full p-2 mb-2 text-sm"
-          value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
-        />
-
-        <div className=" mt-3">
-          <div className="flex gap-2">
-            <button onClick={onClose} className="font-roboto px-3 py-1 bg-red-500 rounded text-sm text-white">
-              Cancel
-            </button>
-            <button
-              onClick={handleUpdate}
-              className="px-3 py-1 bg-blue-500 text-white rounded text-sm"
-            >
-              Update
-            </button>
-          </div>
+        <div className="flex justify-end gap-2 mt-20">
+          <button onClick={onClose} className="px-3 py-2 bg-red-500 text-white text-center  rounded text-xs hover:bg-red-600 transition-colors">
+            <img src={assets.cancel} alt="Cancel" className="w-3 h-3 inline mr-2 invert  " />
+            Cancel
+          </button>
+          <button onClick={handleUpdate} className="px-3 py-1 bg-green-500 text-white  text-center rounded text-xs hover:bg-green-600 transition-colors">
+            <img src={assets.save} alt="Save" className="w-4 h-4 inline  mr-2 invert" />
+            Save
+          </button>
         </div>
       </div>
     </div>

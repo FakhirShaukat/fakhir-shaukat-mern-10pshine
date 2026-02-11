@@ -1,66 +1,76 @@
 import Note from "../models/Note.js";
 
-// GET all notes
+// GET all notes for logged-in user
 export const getNotes = async (req, res) => {
   try {
-    const notes = await Note.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const notes = await Note.find({ user: req.user }).sort({ createdAt: -1 });
     res.json(notes);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Failed to fetch notes" });
   }
 };
 
 // CREATE note
 export const createNote = async (req, res) => {
   try {
-    const { title, description, deadline, color } = req.body;
+    const { title, content } = req.body;
 
-    if (!req.user) return res.status(401).json({ message: "User not found" });
+    // Validate content
+    if (!title || !content || content === "<p><br></p>") {
+      return res.status(400).json({ message: "Title and content are required" });
+    }
 
-    const note = new Note({
-      user: req.user._id,
+    const note = await Note.create({
       title,
-      description,
-      deadline,
-      color,
+      content,
+      user: req.user, // ✅ use user ID directly
     });
 
-    const createdNote = await note.save();
-    res.status(201).json(createdNote);
+    res.status(201).json(note);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Failed to create note" });
   }
 };
 
-
-
 // UPDATE note
 export const updateNote = async (req, res) => {
-  const note = await Note.findById(req.params.id);
+  try {
+    const { id } = req.params;
+    const { title, content } = req.body;
 
-  if (!note) {
-    return res.status(404).json({ message: "Note not found" });
+    if (!title || !content || content === "<p><br></p>") {
+      return res.status(400).json({ message: "Title and content are required" });
+    }
+
+    const updatedNote = await Note.findOneAndUpdate(
+      { _id: id, user: req.user }, // ✅ use user ID directly
+      { title, content },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedNote) return res.status(404).json({ message: "Note not found" });
+
+    res.json(updatedNote);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to update note" });
   }
-
-  note.title = req.body.title || note.title;
-  note.description = req.body.description || note.description;
-  note.deadline = req.body.deadline || note.deadline;
-  note.color = req.body.color || note.color;
-
-  const updatedNote = await note.save();
-  res.json(updatedNote);
 };
 
 // DELETE note
 export const deleteNote = async (req, res) => {
-  const note = await Note.findById(req.params.id);
+  try {
+    const { id } = req.params;
 
-  if (!note) {
-    return res.status(404).json({ message: "Note not found" });
+    const note = await Note.findOneAndDelete({ _id: id, user: req.user }); // ✅ use user ID directly
+
+    if (!note) return res.status(404).json({ message: "Note not found" });
+
+    res.json({ message: "Note deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to delete note" });
   }
-
-  await note.deleteOne();
-  res.json({ message: "Note deleted" });
 };

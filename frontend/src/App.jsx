@@ -6,6 +6,9 @@ import Dashboard from "./pages/Dashboard";
 import AddNotes from "./components/AddNotes";
 import EditNotes from "./components/EditNotes";
 import UserProfile from "./pages/UserProfile";
+import VerifyCode from "./pages/VerifyCode";
+import ResetPassword from "./pages/ResetPassword";
+
 
 function App() {
   return (
@@ -14,6 +17,8 @@ function App() {
         <Route path="/" element={<LoginPage/>} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot" element={<ForgotPasswordPage />} />
+        <Route path="/verify" element={<VerifyCode />} />
+        <Route path="/reset" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/addnotes" element={<AddNotes />} />
         <Route path="/editnotes" element={<EditNotes />} />

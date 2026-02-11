@@ -1,12 +1,18 @@
 import  express from 'express';
 import { registerUser, loginUser, googleLogin } from '../controllers/authController.js';
+import { forgotPassword } from '../controllers/authController.js';
+import { verifyResetCode } from '../controllers/authController.js';
+import { resetPassword } from '../controllers/authController.js';
 
 
 const router = express.Router();
 
 router.post('/signup', registerUser);
 router.post('/login', loginUser);
-router.post('/google', googleLogin); // for Google OAuth
+router.post('/google', googleLogin); 
+router.post('/forgot-password', forgotPassword);
+router.post('/verify-reset-code', verifyResetCode);
+router.post('/reset-password', resetPassword);
 
 
 
