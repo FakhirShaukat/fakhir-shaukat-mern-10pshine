@@ -113,6 +113,23 @@ fakhir-shaukat-mern-notes-app/
 - Notes are stored with title and rich text content.
 - ReactQuill allows formatted note editing.
 
+7: Testing
+Test folders are included in: 
+- frontend/test
+- backend/test
+
+8: Future Improvements
+- User Authentication (JWT)
+- Note search functionality
+- Pin/Unpin notes
+- Dark mode
+- Cloud deployment (MongoDB Atlas)
+
+Author:
+Fakhir Shaukat (MERN stack Developer)
+
+9: License:
+This project is developed for educational purpose
 
 
 
