@@ -28,27 +28,51 @@ Backend:
 - Mongoose
 - dotenv
 
-3: Project Structure:
+3: Project Structure
 
+```
+fakhir-shaukat-mern-notes-app/
+│
 ├── backend/
-│ ├── models/
-│ │ └── Note.js
-│ ├── controllers/
-│ │ └── noteController.js
-│ ├── routes/
-│ │ └── noteRoutes.js
-│ ├── server.js
-│ └── .env
+│   ├── config/
+│   ├── controllers/
+│   │   └── noteController.js
+│   ├── middleware/
+│   ├── models/
+│   │   └── Note.js
+│   ├── routes/
+│   │   └── noteRoutes.js
+│   ├── test/
+│   ├── utils/
+│   ├── .env
+│   ├── app.js
+│   ├── server.js
+│   ├── package.json
+│   └── package-lock.json
 │
 ├── frontend/
-│ ├── src/
-| | ├── assets/
-│ │ ├── components/
-│ │ ├── pages/
-│ │ └── App.jsx
-│ └── package.json
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── test/
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   └── main.jsx
+│   │
+│   ├── index.html
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── eslint.config.js
+│   ├── package.json
+│   └── package-lock.json
 │
+├── .gitignore
 └── README.md
+```
+
 
 4: Installation & Setup
 
