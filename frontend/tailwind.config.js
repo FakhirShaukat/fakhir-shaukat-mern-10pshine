@@ -9,6 +9,8 @@ export default {
       fontFamily: {
         outfit: ['Outfit', 'sans-serif'],
         roboto: ['Roboto', 'sans-serif'],
+        shadow: ['Shadows Into Light', 'cursive'],
+        pacifico: ['Pacifico', 'cursive'],
       },
     },
   },

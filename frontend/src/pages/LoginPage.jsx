@@ -95,10 +95,10 @@ const LoginPage = () => {
 
       google.accounts.id.renderButton(container, {
         type: "standard",
-        theme: "outline",
+        theme: "filled_white",
         size: "large",
-        text: "sign_in_with",
-        shape: "pill",
+        text: "continue_with",
+        shape: "rectangular",
         logo_alignment: "left",
         width: buttonWidth,
       });
@@ -116,12 +116,13 @@ const LoginPage = () => {
     >
       <div className="w-[300px] md:w-[500px] h-auto bg-white rounded-md shadow-md">
         <div className="form-details p-4 flex flex-col ">
-          <h1 className="text-2xl font-semibold">Welcome</h1>
+          <h1 className="text-center font-pacifico text-lg cursor-pointer">Notify</h1>
+          <h1 className="text-xl font-semibold pt-4">Welcome</h1>
           <p className="pt-2 text-xs text-gray-400">Take notes and organize your thoughts</p>
 
           <div className="inputs flex flex-col gap-4 pt-2">
-            <input type="email" placeholder="Enter your Email" className="border  text-sm p-2" value={email} onChange={(e) => setEmail(e.target.value)}/>
-            <input type="password" placeholder="Enter your Password" className="border text-sm p-2" value={password} onChange={(e) => setPassword(e.target.value)}/>
+            <input type="email" placeholder="Enter your Email" className="border rounded text-sm p-2 focus:outline-none" value={email} onChange={(e) => setEmail(e.target.value)}/>
+            <input type="password" placeholder="Enter your Password" className="border rounded text-sm p-2 focus:outline-none" value={password} onChange={(e) => setPassword(e.target.value)}/>
             <div className="flex flex-col items-center">
               <button className="flex justify-end text-xs gap-2">
                 Don't have an account ?{" "}
@@ -130,7 +131,7 @@ const LoginPage = () => {
               <button className="flex justify-end text-xs text-blue-600 underline"><a href="/forgot">Forgot Password ?</a></button>
             </div>
 
-            <div className="flex justify-center"><button onClick={handleLogin} className=" rounded-full p-2 text-sm w-[45%] font-semibold bg-blue-500 text-white hover:bg-blue-600 transition duration-300">Login</button></div>
+            <div className="flex justify-center"><button onClick={handleLogin} className=" rounded p-2 text-sm w-[85%] font-semibold bg-blue-500 text-white hover:bg-blue-600 transition duration-300">Login</button></div>
             
           </div>
 
