@@ -142,7 +142,7 @@ const LoginPage = () => {
           </div>
 
           {/* Google Sign-In */}
-          <div id="google-login-btn" className="google-signUp flex justify-center items-center pt-2 "></div>
+          <div id="google-login-btn" className="google-signUp w-full flex justify-center items-center pt-2 "></div>
         </div>
       </div>
     </div>
